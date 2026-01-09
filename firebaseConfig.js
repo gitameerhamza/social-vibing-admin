@@ -2,6 +2,8 @@
 // Initializes Firebase using config from `expo-constants` (populated from .env via app.config.js)
 import Constants from 'expo-constants';
 import { initializeApp } from 'firebase/app';
+import { getAuth } from 'firebase/auth';
+import { getFirestore } from 'firebase/firestore';
 import { Platform } from 'react-native';
 
 const extra = (Constants.expoConfig && Constants.expoConfig.extra) || (Constants.manifest && Constants.manifest.extra) || {};
@@ -18,6 +20,10 @@ const firebaseConfig = {
 
 const app = initializeApp(firebaseConfig);
 
+// Initialize Firebase services
+const auth = getAuth(app);
+const db = getFirestore(app);
+
 // Firebase Analytics is web-only. Initialize it only on web to avoid runtime errors on native.
 let analytics = null;
 if (Platform.OS === 'web') {
@@ -32,4 +38,4 @@ if (Platform.OS === 'web') {
     .catch(() => {});
 }
 
-export { app as firebaseApp, analytics, firebaseConfig };
+export { app as firebaseApp, auth, db, analytics, firebaseConfig };

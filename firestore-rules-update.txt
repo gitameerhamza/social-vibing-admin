@@ -1,0 +1,62 @@
+Add this section to your Firebase Firestore Rules (after the questions section, before the closing braces):
+
+    // Advertisements collection (Admin Panel)
+    match /advertisements/{adId} {
+      allow read: if isSignedIn();
+      allow create: if isSignedIn();
+      allow update: if isSignedIn();
+      allow delete: if isSignedIn();
+    }
+    
+    // Blocked Content collection (Admin Panel)
+    match /blocked_content/{contentId} {
+      allow read: if isSignedIn();
+      allow create: if isSignedIn();
+      allow update: if isSignedIn();
+      allow delete: if isSignedIn();
+    }
+    
+    // Join Requests collection (Admin Panel)
+    match /join_requests/{requestId} {
+      allow read: if isSignedIn();
+      allow create: if isSignedIn();
+      allow update: if isSignedIn();
+      allow delete: if isSignedIn();
+    }
+    
+    // Blocked Members collection (Admin Panel)
+    match /blocked_members/{memberId} {
+      allow read: if isSignedIn();
+      allow create: if isSignedIn();
+      allow update: if isSignedIn();
+      allow delete: if isSignedIn();
+    }
+    
+    // Management Records collection (Admin Panel)
+    match /management_records/{recordId} {
+      allow read: if isSignedIn();
+      allow create: if isSignedIn();
+      allow update: if isSignedIn();
+      allow delete: if isSignedIn();
+    }
+
+Instructions:
+1. Go to Firebase Console: https://console.firebase.google.com
+2. Select your project
+3. Go to Firestore Database → Rules tab
+4. Add the above sections before the final closing braces }}
+5. Click "Publish" to save the rules
+
+The final structure should look like:
+    ...
+    match /questions/{questionId} {
+      ...existing rules...
+    }
+    
+    // ADD NEW RULES HERE
+    match /advertisements/{adId} {
+      ...
+    }
+    
+  }  // closing for documents
+}  // closing for cloud.firestore

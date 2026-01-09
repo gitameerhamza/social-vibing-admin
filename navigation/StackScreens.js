@@ -27,6 +27,15 @@ import SidebarOptionsScreen from "../screens/SideBarOptionScreen";
 
 // ✅ Make the import name match what you register below
 import CreateCommunityScreen from "../screens/CreateCommunityScreen";
+import AdvertisementScreen from "../screens/AdvertisementScreen";
+import CommunityMembersScreen from "../screens/CommunityMembersScreen";
+import CoverImageScreen from "../screens/CoverImageScreen";
+import BlockedContentScreen from "../screens/BlockedContentScreen";
+import JoinRequestsScreen from "../screens/JoinRequestsScreen";
+import BlockedMembersScreen from "../screens/BlockedMembersScreen";
+import TransferAdminScreen from "../screens/TransferAdminScreen";
+import ManagementRecordsScreen from "../screens/ManagementRecordsScreen";
+import VerifyUsersScreen from "../screens/VerifyUsersScreen";
 
 const Tab = createBottomTabNavigator();
 
@@ -90,6 +99,7 @@ export default function StackScreens() {
 
       {/* Admin / Settings */}
       <Stack.Screen name="AdminPortal" component={AdminPortalScreen} options={{ headerShown: false }} />
+      <Stack.Screen name="VerifyUsers" component={VerifyUsersScreen} options={{ title: "Verify Users" }} />
       <Stack.Screen name="DataCenter" component={DataCenterScreen} options={{ title: "Data Center" }} />
       <Stack.Screen name="PermissionsPrivacy" component={PermissionsPrivacyScreen} options={{ title: "Permissions & Privacy" }} />
       <Stack.Screen name="Appearance" component={AppearanceScreen} options={{ title: "Appearance" }} />
@@ -113,6 +123,46 @@ export default function StackScreens() {
         name="CreateCommunity"
         component={CreateCommunityScreen}
         options={{ title: "Create Community" }}
+      />
+      <Stack.Screen
+        name="Advertisement"
+        component={AdvertisementScreen}
+        options={{ title: "Advertisements" }}
+      />
+      <Stack.Screen
+        name="CommunityMembers"
+        component={CommunityMembersScreen}
+        options={{ title: "Community Members" }}
+      />
+      <Stack.Screen
+        name="CoverImage"
+        component={CoverImageScreen}
+        options={{ title: "Cover Image" }}
+      />
+      <Stack.Screen
+        name="BlockedContent"
+        component={BlockedContentScreen}
+        options={{ title: "Blocked Content" }}
+      />
+      <Stack.Screen
+        name="JoinRequests"
+        component={JoinRequestsScreen}
+        options={{ title: "Join Requests" }}
+      />
+      <Stack.Screen
+        name="BlockedMembers"
+        component={BlockedMembersScreen}
+        options={{ title: "Blocked Members" }}
+      />
+      <Stack.Screen
+        name="TransferAdmin"
+        component={TransferAdminScreen}
+        options={{ title: "Transfer Admin" }}
+      />
+      <Stack.Screen
+        name="ManagementRecords"
+        component={ManagementRecordsScreen}
+        options={{ title: "Management Records" }}
       />
     </Stack.Navigator>
   );

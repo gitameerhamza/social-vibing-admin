@@ -1,9 +1,13 @@
 import React from "react";
-import { View, Text, TouchableOpacity } from "react-native";
+import { View, Text, TouchableOpacity, Alert } from "react-native";
 import { DrawerContentScrollView } from "@react-navigation/drawer";
 import { Ionicons, MaterialIcons } from "@expo/vector-icons";
 import { C } from "../components/Theme";
 import { s } from "../styles/styles";
+import { firebaseApp } from "../firebaseConfig";
+import { getAuth } from "firebase/auth";
+
+const auth = getAuth(firebaseApp);
 
 export default function DrawerSidebar({ navigation }) {
   const Item = ({ icon, label, onPress }) => (
@@ -13,6 +17,28 @@ export default function DrawerSidebar({ navigation }) {
     </TouchableOpacity>
   );
   const goTab = (screen) => navigation.navigate("Stack", { screen: "MainTabs", params: { screen } });
+
+  const handleLogout = async () => {
+    Alert.alert(
+      "Logout",
+      "Are you sure you want to logout?",
+      [
+        { text: "Cancel", style: "cancel" },
+        {
+          text: "Logout",
+          style: "destructive",
+          onPress: async () => {
+            try {
+              await auth.signOut();
+            } catch (error) {
+              console.error("Logout error:", error);
+              Alert.alert("Error", "Failed to logout");
+            }
+          },
+        },
+      ]
+    );
+  };
 
   return (
     <DrawerContentScrollView style={{ backgroundColor: C.bg }}>
@@ -27,6 +53,7 @@ export default function DrawerSidebar({ navigation }) {
 
       <View style={s.sectionLabelWrap}><Text style={s.sectionLabel}>Community</Text></View>
       <Item icon={<Ionicons name="settings-outline" size={22} color={C.accent} />} label="Admin Portal" onPress={() => navigation.navigate("Stack", { screen: "AdminPortal" })} />
+      <Item icon={<Ionicons name="shield-checkmark-outline" size={22} color={C.accent} />} label="Verify Users" onPress={() => navigation.navigate("Stack", { screen: "VerifyUsers" })} />
       <Item icon={<Ionicons name="chatbubbles-outline" size={22} color={C.accent} />} label="Public Rooms" onPress={() => navigation.navigate("Stack", { screen: "CommunityRooms" })} />
       <Item icon={<Ionicons name="color-palette-outline" size={22} color={C.accent} />} label="Appearance" onPress={() => navigation.navigate("Stack", { screen: "Appearance" })} />
       <Item icon={<Ionicons name="shield-checkmark-outline" size={22} color={C.accent} />} label="Permissions" onPress={() => navigation.navigate("Stack", { screen: "PermissionsPrivacy" })} />
@@ -36,6 +63,10 @@ export default function DrawerSidebar({ navigation }) {
       <Item icon={<Ionicons name="list-circle-outline" size={22} color={C.accent} />} label="Sidebar (S2)" onPress={() => navigation.navigate("Stack", { screen: "S2" })} />
       <Item icon={<Ionicons name="add-circle-outline" size={22} color={C.accent} />} label="Create Community" onPress={() => navigation.navigate("Stack", { screen: "CreateCommunity" })} />
       <Item icon={<Ionicons name="speedometer-outline" size={22} color={C.accent} />} label="Data Center" onPress={() => navigation.navigate("Stack", { screen: "DataCenter" })} />
+
+      <View style={{ marginTop: 20, paddingTop: 20, borderTopWidth: 1, borderTopColor: C.border }}>
+        <Item icon={<Ionicons name="log-out-outline" size={22} color="#FF3232" />} label="Logout" onPress={handleLogout} />
+      </View>
     </DrawerContentScrollView>
   );
 }
