@@ -36,6 +36,8 @@ import BlockedMembersScreen from "../screens/BlockedMembersScreen";
 import TransferAdminScreen from "../screens/TransferAdminScreen";
 import ManagementRecordsScreen from "../screens/ManagementRecordsScreen";
 import VerifyUsersScreen from "../screens/VerifyUsersScreen";
+import ReportsDashboardScreen from "../screens/ReportsDashboardScreen";
+import ReportDetailScreen from "../screens/ReportDetailScreen";
 
 const Tab = createBottomTabNavigator();
 
@@ -163,6 +165,16 @@ export default function StackScreens() {
         name="ManagementRecords"
         component={ManagementRecordsScreen}
         options={{ title: "Management Records" }}
+      />
+      <Stack.Screen
+        name="ReportsDashboard"
+        component={ReportsDashboardScreen}
+        options={{ headerShown: false }}
+      />
+      <Stack.Screen
+        name="ReportDetail"
+        component={ReportDetailScreen}
+        options={{ headerShown: false }}
       />
     </Stack.Navigator>
   );

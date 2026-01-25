@@ -336,6 +336,12 @@ export default function AdminPortalScreen({ navigation }) {
         {/* Quick Actions */}
         <SectionHeader title="Quick Actions" />
         <BorderRow
+          title="Reports Dashboard"
+          colors={C.gradientRed}
+          icon="🚨"
+          onPress={() => go("ReportsDashboard")}
+        />
+        <BorderRow
           title="Create New Community"
           colors={C.gradientGreen}
           icon="➕"
