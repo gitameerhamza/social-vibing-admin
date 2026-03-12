@@ -1,7 +1,7 @@
 // firebaseConfig.js
 // Initializes Firebase using config from `expo-constants` (populated from .env via app.config.js)
 import Constants from 'expo-constants';
-import { initializeApp } from 'firebase/app';
+import { initializeApp, getApps, getApp } from 'firebase/app';
 import { initializeAuth, getReactNativePersistence, getAuth } from 'firebase/auth';
 import { getFirestore } from 'firebase/firestore';
 import { Platform } from 'react-native';
@@ -19,16 +19,22 @@ const firebaseConfig = {
   measurementId: extra.FIREBASE_MEASUREMENT_ID,
 };
 
-const app = initializeApp(firebaseConfig);
+// Guard against double initialization
+const app = getApps().length === 0 ? initializeApp(firebaseConfig) : getApp();
 
 // Initialize Firebase services with persistence
 let auth;
 if (Platform.OS === 'web') {
   auth = getAuth(app);
 } else {
-  auth = initializeAuth(app, {
-    persistence: getReactNativePersistence(AsyncStorage)
-  });
+  try {
+    auth = initializeAuth(app, {
+      persistence: getReactNativePersistence(AsyncStorage)
+    });
+  } catch (e) {
+    // If auth is already initialized, just get the existing instance
+    auth = getAuth(app);
+  }
 }
 const db = getFirestore(app);
 

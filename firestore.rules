@@ -665,9 +665,13 @@ service cloud.firestore {
     
     // Reports collection - User reporting system
     match /reports/{reportId} {
-      // Admins can read all reports, users can read their own reports (for duplicate checking)
+      // Admins can read all reports; users can read their own reports (for duplicate checking);
+      // community moderators can read reports scoped to their community.
       allow read: if isAdmin() || 
-                    (isSignedIn() && resource.data.reporterId == request.auth.uid);
+                    (isSignedIn() && resource.data.reporterId == request.auth.uid) ||
+                    (isSignedIn() &&
+                      resource.data.communityId != null &&
+                      isCommunityModerator(resource.data.communityId));
       
       // Any authenticated user can create a report with validation
       allow create: if isSignedIn() && 
@@ -678,11 +682,18 @@ service cloud.firestore {
                       request.resource.data.reviewedBy == null && // No pre-assigned reviewer
                       request.resource.data.description.size() <= 500; // Description limit
       
-      // Only admins can update reports (status, action, notes)
-      allow update: if isAdmin() && 
-                      request.resource.data.diff(resource.data).affectedKeys()
-                        .hasOnly(['status', 'reviewedBy', 'reviewedAt', 'updatedAt', 
-                                  'actionTaken', 'actionDetails', 'adminNotes', 'isResolved', 'priority']);
+      // Platform admins can update any field.
+      // Community moderators can only update community-scoped reports with limited fields.
+      allow update: if (isAdmin() && 
+                        request.resource.data.diff(resource.data).affectedKeys()
+                          .hasOnly(['status', 'reviewedBy', 'reviewedAt', 'updatedAt', 
+                                    'actionTaken', 'actionDetails', 'adminNotes', 'isResolved', 'priority'])) ||
+                       (isSignedIn() &&
+                        resource.data.communityId != null &&
+                        isCommunityModerator(resource.data.communityId) &&
+                        request.resource.data.diff(resource.data).affectedKeys()
+                          .hasOnly(['status', 'actionTaken', 'communityReviewedBy',
+                                    'communityReviewedAt', 'adminNotes', 'isResolved', 'updatedAt']));
       
       // Only admins can delete reports
       allow delete: if isAdmin();

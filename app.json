@@ -20,13 +20,29 @@
         "foregroundImage": "./assets/adaptive-icon.png",
         "backgroundColor": "#ffffff"
       },
-      "edgeToEdgeEnabled": true
+      "edgeToEdgeEnabled": true,
+      "package": "com.arshman786k.snack38a1a004d2b340f7b1b80acb5a3a91ed"
     },
     "web": {
       "favicon": "./assets/favicon.png"
     },
     "plugins": [
       "expo-font"
-    ]
+    ],
+    "extra": {
+      "FIREBASE_API_KEY": "AIzaSyD8GUTKesMY2Hpv-D3JS0vUG3CnD6yhRgc",
+      "FIREBASE_AUTH_DOMAIN": "social-vibing-karr.firebaseapp.com",
+      "FIREBASE_PROJECT_ID": "social-vibing-karr",
+      "FIREBASE_STORAGE_BUCKET": "social-vibing-karr.firebasestorage.app",
+      "FIREBASE_MESSAGING_SENDER_ID": "907907966035",
+      "FIREBASE_APP_ID": "1:907907966035:web:eca4797d3d76e6f00552a6",
+      "FIREBASE_MEASUREMENT_ID": "G-496NQLYE01",
+      "CLOUDINARY_CLOUD_NAME": "djov7kouf",
+      "CLOUDINARY_UPLOAD_PRESET": "community_uploads",
+      "CLOUDINARY_API_KEY": "363822471338698",
+      "eas": {
+        "projectId": "ccb43dbc-26cf-4b81-8f98-88cb2875b4e1"
+      }
+    }
   }
 }

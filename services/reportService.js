@@ -428,12 +428,29 @@ const removeReportedContent = async (report, batch, adminId) => {
         break;
         
       case 'message':
-        // Delete message
-        const messageRef = doc(db, 'messages', contentId);
-        const messageDoc = await getDoc(messageRef);
-        
-        if (messageDoc.exists()) {
-          batch.delete(messageRef);
+        // Delete message from the correct subcollection
+        // Private messages: conversations/{conversationId}/messages/{messageId}
+        // Community messages: communities/{communityId}/groups/{groupId}/messages/{messageId}
+        if (report.communityId && report.groupId) {
+          // Community group message
+          const communityMsgRef = doc(db, 'communities', report.communityId, 'groups', report.groupId, 'messages', contentId);
+          const communityMsgDoc = await getDoc(communityMsgRef);
+          if (communityMsgDoc.exists()) {
+            batch.delete(communityMsgRef);
+          } else {
+            console.warn(`Community message ${contentId} not found in communities/${report.communityId}/groups/${report.groupId}/messages`);
+          }
+        } else if (report.conversationId) {
+          // Private/direct message
+          const privateMsgRef = doc(db, 'conversations', report.conversationId, 'messages', contentId);
+          const privateMsgDoc = await getDoc(privateMsgRef);
+          if (privateMsgDoc.exists()) {
+            batch.delete(privateMsgRef);
+          } else {
+            console.warn(`Private message ${contentId} not found in conversations/${report.conversationId}/messages`);
+          }
+        } else {
+          console.error(`Cannot delete message ${contentId}: missing conversationId and communityId/groupId`);
         }
         break;
         

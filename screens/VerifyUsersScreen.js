@@ -23,6 +23,8 @@ import {
   doc,
   updateDoc,
   serverTimestamp,
+  query,
+  where,
 } from "firebase/firestore";
 import { getAuth } from "firebase/auth";
 
@@ -45,25 +47,30 @@ export default function VerifyUsersScreen({ navigation }) {
   const loadData = async () => {
     try {
       setLoading(true);
+      
+      // Use targeted query for pending users instead of loading all users
+      const pendingQuery = query(collection(db, "users"), where("verificationStatus", "==", "pending"));
+      const pendingSnapshot = await getDocs(pendingQuery);
+      const pendingUsersData = [];
+      pendingSnapshot.forEach((docSnap) => {
+        pendingUsersData.push({ id: docSnap.id, ...docSnap.data() });
+      });
+
+      // Load all users only when on "all" tab or for stats
       const usersSnapshot = await getDocs(collection(db, "users"));
       const allUsersData = [];
-      const pendingUsersData = [];
-      let verifiedCount = 0, bannedCount = 0, pendingCount = 0;
+      let verifiedCount = 0, bannedCount = 0;
 
       usersSnapshot.forEach((docSnap) => {
         const userData = { id: docSnap.id, ...docSnap.data() };
         allUsersData.push(userData);
-        if (userData.verificationStatus === "pending") {
-          pendingUsersData.push(userData);
-          pendingCount++;
-        }
         if (userData.verificationStatus === "verified" || userData.isVerified) verifiedCount++;
         if (userData.isBanned) bannedCount++;
       });
 
       setAllUsers(allUsersData);
       setPendingUsers(pendingUsersData);
-      setStats({ total: allUsersData.length, verified: verifiedCount, pending: pendingCount, banned: bannedCount });
+      setStats({ total: allUsersData.length, verified: verifiedCount, pending: pendingUsersData.length, banned: bannedCount });
       setLoading(false);
     } catch (error) {
       console.error("Error loading users:", error);
@@ -241,6 +248,9 @@ export default function VerifyUsersScreen({ navigation }) {
             <Text style={styles.email}>{user.email || "N/A"}</Text>
             <Text style={styles.infoText}>DOB: {user.dateOfBirth || "N/A"} | Age: {user.age || "N/A"}</Text>
             <Text style={styles.infoText}>📄 Document: {user.documentType || "N/A"}</Text>
+            {user.verificationSubmittedAt && (
+              <Text style={styles.infoText}>📅 Submitted: {user.verificationSubmittedAt?.toDate ? user.verificationSubmittedAt.toDate().toLocaleDateString() : new Date(user.verificationSubmittedAt).toLocaleDateString()}</Text>
+            )}
             {isPending && <Text style={styles.statusPending}>⏱️ Pending</Text>}
             {isRejected && <Text style={styles.statusRejected}>❌ Rejected: {user.rejectionReason || "No reason"}</Text>}
             {isRevoked && <Text style={styles.statusRevoked}>⚠️ Revoked</Text>}

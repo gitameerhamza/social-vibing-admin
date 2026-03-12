@@ -31,8 +31,6 @@ export default function CreateCommunityScreen({ navigation }) {
   const [uploading, setUploading] = useState(false);
   const [showLanguageModal, setShowLanguageModal] = useState(false);
   const [showCategoryModal, setShowCategoryModal] = useState(false);
-  const [showCoverImageModal, setShowCoverImageModal] = useState(false);
-  const [showBackgroundModal, setShowBackgroundModal] = useState(false);
   const [showColorModal, setShowColorModal] = useState(false);
   const [coverImage, setCoverImage] = useState(null);
   const [background, setBackground] = useState(null);
@@ -310,7 +308,7 @@ export default function CreateCommunityScreen({ navigation }) {
         <View style={{ marginTop: 40 }}>
           <Text style={styles.sectionTitle}>Customize Look</Text>
 
-          <TouchableOpacity style={styles.menuRow} onPress={() => setShowCoverImageModal(true)}>
+          <TouchableOpacity style={styles.menuRow} onPress={() => pickImage(setCoverImage)}>
             <Text style={styles.menuText}>Cover Image</Text>
             {coverImage ? (
               <Image source={{ uri: coverImage }} style={styles.previewImage} />
@@ -319,7 +317,7 @@ export default function CreateCommunityScreen({ navigation }) {
             )}
           </TouchableOpacity>
 
-          <TouchableOpacity style={styles.menuRow} onPress={() => setShowBackgroundModal(true)}>
+          <TouchableOpacity style={styles.menuRow} onPress={() => pickImage(setBackground)}>
             <Text style={styles.menuText}>Community Background</Text>
             {background ? (
               <Image source={{ uri: background }} style={styles.previewImage} />
@@ -545,91 +543,7 @@ export default function CreateCommunityScreen({ navigation }) {
         </View>
       </Modal>
 
-      {/* Cover Image Selection Modal */}
-      <Modal
-        visible={showCoverImageModal}
-        transparent
-        animationType="slide"
-        onRequestClose={() => setShowCoverImageModal(false)}
-      >
-        <View style={styles.modalOverlay}>
-          <View style={[styles.modalCard, styles.pickerModal]}>
-            <View style={styles.modalHeader}>
-              <Text style={styles.modalTitle}>Cover Image</Text>
-              <TouchableOpacity onPress={() => setShowCoverImageModal(false)}>
-                <Ionicons name="close" size={24} color="#fff" />
-              </TouchableOpacity>
-            </View>
-            <View style={styles.imagePickerContent}>
-              <TouchableOpacity 
-                style={styles.uploadButton}
-                onPress={() => {
-                  pickImage(setCoverImage);
-                  setShowCoverImageModal(false);
-                }}
-              >
-                <Ionicons name="cloud-upload-outline" size={32} color="#4b6cff" />
-                <Text style={styles.uploadText}>Choose from Gallery</Text>
-              </TouchableOpacity>
-              {coverImage && (
-                <TouchableOpacity 
-                  style={styles.removeButton}
-                  onPress={() => {
-                    setCoverImage(null);
-                    setShowCoverImageModal(false);
-                  }}
-                >
-                  <Ionicons name="trash-outline" size={20} color="#ff4444" />
-                  <Text style={styles.removeText}>Remove Image</Text>
-                </TouchableOpacity>
-              )}
-            </View>
-          </View>
-        </View>
-      </Modal>
 
-      {/* Background Selection Modal */}
-      <Modal
-        visible={showBackgroundModal}
-        transparent
-        animationType="slide"
-        onRequestClose={() => setShowBackgroundModal(false)}
-      >
-        <View style={styles.modalOverlay}>
-          <View style={[styles.modalCard, styles.pickerModal]}>
-            <View style={styles.modalHeader}>
-              <Text style={styles.modalTitle}>Background Image</Text>
-              <TouchableOpacity onPress={() => setShowBackgroundModal(false)}>
-                <Ionicons name="close" size={24} color="#fff" />
-              </TouchableOpacity>
-            </View>
-            <View style={styles.imagePickerContent}>
-              <TouchableOpacity 
-                style={styles.uploadButton}
-                onPress={() => {
-                  pickImage(setBackground);
-                  setShowBackgroundModal(false);
-                }}
-              >
-                <Ionicons name="cloud-upload-outline" size={32} color="#4b6cff" />
-                <Text style={styles.uploadText}>Choose from Gallery</Text>
-              </TouchableOpacity>
-              {background && (
-                <TouchableOpacity 
-                  style={styles.removeButton}
-                  onPress={() => {
-                    setBackground(null);
-                    setShowBackgroundModal(false);
-                  }}
-                >
-                  <Ionicons name="trash-outline" size={20} color="#ff4444" />
-                  <Text style={styles.removeText}>Remove Image</Text>
-                </TouchableOpacity>
-              )}
-            </View>
-          </View>
-        </View>
-      </Modal>
 
       {/* Theme Color Selection Modal */}
       <Modal
